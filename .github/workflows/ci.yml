@@ -30,10 +30,10 @@ jobs:
         cache: 'npm'
     - name: Install dependencies
       run: npm ci
-      working-directory: ambulance-ufe/
+      working-directory: wac/ambulance-ufe/
     - name: Build
       run: npm run build --if-present
-      working-directory: ambulance-ufe/
+      working-directory: wac/ambulance-ufe/
     - name: Test
       run: npm test
-      working-directory: ambulance-ufe/
+      working-directory: wac/ambulance-ufe/
