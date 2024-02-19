@@ -18,17 +18,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - name: Print Current Directory
-      run: pwd
-    - name: List Files in Directory
-      run: ls -al
-      working-directory: wac/ambulance-ufe
-    - name: Install dependencies
-      run: npm ci
-      working-directory: wac/ambulance-ufe
-    - name: Build
-      run: npm run build --if-present
-      working-directory: wac/ambulance-ufe
-    - name: Test
-      run: npm test
-      working-directory: wac/ambulance-ufe
+    - run: npm ci
+    - run: npm run build --if-present
+    - run: npm test
