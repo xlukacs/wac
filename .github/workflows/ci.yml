@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x]  # Change to a valid Node.js version
+        node-version: [20.x]
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
@@ -18,17 +18,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - name: Print Current Directory
-      run: pwd
-    - name: List Files in Directory
-      run: ls -al
-      working-directory: ambulance-ufe  # Adjusted working directory
-    - name: Install dependencies
-      run: npm ci
-      working-directory: ambulance-ufe  # Adjusted working directory
-    - name: Build
-      run: npm run build --if-present
-      working-directory: ambulance-ufe  # Adjusted working directory
-    - name: Test
-      run: npm test
-      working-directory: ambulance-ufe  # Adjusted working directory
+    - run: npm ci
+    - run: npm run build --if-present
+    - run: npm test
