@@ -36,7 +36,7 @@ jobs:
       uses: docker/metadata-action@v3
       with:
         images: |
-          <your-dockerhub-account>/ambulance-ufe
+          madrent/ambulance-ufe
         tags: |
           type=schedule
           type=ref,event=branch
