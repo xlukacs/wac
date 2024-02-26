@@ -1,4 +1,4 @@
-import { Component, Host, h } from '@stencil/core';
+import { Component, Event, EventEmitter,  Host, h } from '@stencil/core';
 
 @Component({
   tag: 'lbm-ambulance-wl-list',
@@ -6,12 +6,13 @@ import { Component, Host, h } from '@stencil/core';
   shadow: true,
 })
 export class LbmAmbulanceWlList {
+  @Event({ eventName: "entry-clicked"}) entryClicked: EventEmitter<string>;
   waitingPatients: any[];
 
   private async getWaitingPatientsAsync(){
     return await Promise.resolve(
       [{
-          name: 'Jožko Púčik 2',
+          name: 'Jožko Púčik',
           patientId: '10001',
           since: new Date(Date.now() - 10 * 60).toISOString(),
           estimatedStart: new Date(Date.now() + 65 * 60).toISOString(),
@@ -45,8 +46,8 @@ export class LbmAmbulanceWlList {
     return (
       <Host>
         <md-list>
-          {this.waitingPatients.map(patient =>
-            <md-list-item>
+          {this.waitingPatients.map((patient, index) =>
+          <md-list-item onClick={ () => this.entryClicked.emit(index.toString())}>
               <div slot="headline">{patient.name}</div>
               <div slot="supporting-text">{"Predpokladaný vstup: " + this.isoDateToLocale(patient.estimatedStart)}</div>
                 <md-icon slot="start">person</md-icon>
