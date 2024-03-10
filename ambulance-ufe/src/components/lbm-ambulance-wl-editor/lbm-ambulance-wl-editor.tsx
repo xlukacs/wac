@@ -34,7 +34,6 @@ export class LbmAmbulanceWlEditor {
       };
       return this.entry;
     }
-
     if ( !this.entryId ) {
        this.isValid = false;
        return undefined
@@ -81,6 +80,7 @@ export class LbmAmbulanceWlEditor {
   private handleSliderInput(event: Event) {
     this.duration = +(event.target as HTMLInputElement).value;
   }
+
  render() {
   if(this.errorMessage) {
       return (
@@ -92,32 +92,37 @@ export class LbmAmbulanceWlEditor {
 
   return (
 
-    <Host>
-      <form ref={el => this.formElement = el}>
-        <md-filled-text-field label="Meno a Priezvisko"
-            oninput={ (ev: InputEvent) => {
-               if(this.entry) {this.entry.name = this.handleInputEvent(ev)}
-            } }>
-            <md-icon slot="leading-icon">person</md-icon>
-          </md-filled-text-field>
-          <md-filled-text-field label="Registračné číslo pacienta"
-            oninput={ (ev: InputEvent) => {
-               if(this.entry) {this.entry.patientId = this.handleInputEvent(ev)}
-            } }>
-            <md-icon slot="leading-icon">fingerprint</md-icon>
-          </md-filled-text-field>
-          <md-filled-text-field label="Čakáte od" disabled>
-            <md-icon slot="leading-icon">watch_later</md-icon>
-          </md-filled-text-field>
+        <Host>
+           <form ref={el => this.formElement = el}>
+            <md-filled-text-field label="Meno a Priezvisko"
+                required value={this.entry?.name}
+                oninput={ (ev: InputEvent) => {
+                  if(this.entry) {this.entry.name = this.handleInputEvent(ev)}
+               } }>
+              <md-icon slot="leading-icon">person</md-icon>
+            </md-filled-text-field>
 
-          {this.renderConditions()}
-      </form>
+            <md-filled-text-field label="Registračné číslo pacienta"
+              required value={this.entry?.patientId}
+              oninput={ (ev: InputEvent) => {
+                 if(this.entry) {this.entry.patientId = this.handleInputEvent(ev)}
+              } }>
+              <md-icon slot="leading-icon">fingerprint</md-icon>
+            </md-filled-text-field>
 
-      <div class="duration-slider">
+            <md-filled-text-field label="Čakáte od" disabled value={this.entry?.waitingSince}>
+
+              <md-icon slot="leading-icon">watch_later</md-icon>
+            </md-filled-text-field>
+
+            {this.renderConditions()}
+          </form>
+        <div class="duration-slider">
           <span class="label">Predpokladaná doba trvania:&nbsp; </span>
           <span class="label">{this.duration}</span>
           <span class="label">&nbsp;minút</span>
           <md-slider
+            min="2" max="45" value={this.entry?.estimatedDurationMinutes || 15} ticks labeled
             oninput={ (ev:InputEvent) => {
               if(this.entry) {
                this.entry.estimatedDurationMinutes
@@ -125,9 +130,11 @@ export class LbmAmbulanceWlEditor {
               this.handleSliderInput(ev)
             } }></md-slider>
         </div>
+
         <md-divider inset></md-divider>
+
         <div class="actions">
-          <md-filled-tonal-button id="delete" disabled={!this.entry || this.entry?.id === "@new" }
+        <md-filled-tonal-button id="delete" disabled={!this.entry || this.entry?.id === "@new" }
             onClick={() => this.deleteEntry()} >
             <md-icon slot="icon">delete</md-icon>
             Zmazať
@@ -144,7 +151,7 @@ export class LbmAmbulanceWlEditor {
             Uložiť
           </md-filled-button>
         </div>
-  </Host>
+      </Host>
   );
 }
 

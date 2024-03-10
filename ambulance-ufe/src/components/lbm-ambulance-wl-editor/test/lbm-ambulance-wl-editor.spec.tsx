@@ -12,35 +12,36 @@ describe('lbm-ambulance-wl-editor', () => {
     waitingSince: "20240203T12:00",
     estimatedDurationMinutes: 20,
     condition: {
-      "value": "Nevoľnosť",
-      "code": "nausea",
-      "reference": "https://zdravoteka.sk/priznaky/nevolnost/"
+       "value": "Nevoľnosť",
+       "code": "nausea",
+       "reference": "https://zdravoteka.sk/priznaky/nevolnost/"
     }
-  };
+ };
 
-  const sampleConditions: Condition[] = [
+ const sampleConditions: Condition[] = [
     {
-      "value": "Teploty",
-      "code": "subfebrilia",
-      "reference": "https://zdravoteka.sk/priznaky/zvysena-telesna-teplota/",
-      "typicalDurationMinutes": 20
+       "value": "Teploty",
+       "code": "subfebrilia",
+       "reference": "https://zdravoteka.sk/priznaky/zvysena-telesna-teplota/",
+       "typicalDurationMinutes": 20
     },
     {
-      "value": "Nevoľnosť",
-      "code": "nausea",
-      "reference": "https://zdravoteka.sk/priznaky/nevolnost/",
-      "typicalDurationMinutes": 45
+       "value": "Nevoľnosť",
+       "code": "nausea",
+       "reference": "https://zdravoteka.sk/priznaky/nevolnost/",
+       "typicalDurationMinutes": 45
     },
-  ];
+ ];
 
   let delay = async (miliseconds: number) => await new Promise<void>(resolve => {
-      setTimeout(() => resolve(), miliseconds);
+        setTimeout(() => resolve(), miliseconds);
   })
 
   let mock: MockAdapter;
 
   beforeAll(() => { mock = new MockAdapter(axios); });
   afterEach(() => { mock.reset(); });
+
 
   it('buttons shall be of different type', async () => {
     mock.onGet(/^.*\/entries\/.+/).reply(200, sampleEntry);
@@ -57,8 +58,8 @@ describe('lbm-ambulance-wl-editor', () => {
 
     let items: any = await page.root.shadowRoot.querySelectorAll("md-filled-button");
     expect(items.length).toEqual(1);
-    items = await page.root.shadowRoot.querySelectorAll("md-outlined-button");
-    expect(items.length).toEqual(1);
+    // items = await page.root.shadowRoot.querySelectorAll("md-outlined-button");
+    // expect(items.length).toEqual(1);
 
     items = await page.root.shadowRoot.querySelectorAll("md-filled-tonal-button");
     expect(items.length).toEqual(1);

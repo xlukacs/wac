@@ -39,7 +39,7 @@ export class LbmAmbulanceWlList {
         {this.errorMessage ? <div class="error">{this.errorMessage}</div> :
         <md-list>
           {this.waitingPatients.map((patient) =>
-          <md-list-item onClick={ () => this.entryClicked.emit(patient.id)}>
+            <md-list-item onClick={ () => this.entryClicked.emit(patient.id)}>
               <div slot="headline">{patient.name}</div>
               <div slot="supporting-text">{"Predpokladaný vstup: " + this.isoDateToLocale(patient.estimatedStart)}</div>
                 <md-icon slot="start">person</md-icon>

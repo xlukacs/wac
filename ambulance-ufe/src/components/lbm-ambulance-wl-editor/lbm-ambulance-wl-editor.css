@@ -1,22 +1,12 @@
 :host {
   --_wl-editor_gap: var(--wl-gap, 0.5rem);
   height: 100%;
-}
 
-form{
-  display: flex;
+
+  /* display: flex;
   flex-direction: column;
   gap: var(--_wl-editor_gap);
-  padding: var(--_wl-editor_gap);
-  }
-
-
-.error{
-  margin: auto;
-  color: red;
-  font-size: 2rem;
-  font-weight: 900;
-  text-align: center;
+  padding: var(--_wl-editor_gap); */
 }
 
 .duration-slider {
@@ -40,4 +30,20 @@ form{
 
 md-divider {
   margin-bottom: var(--_wl-editor_gap);
+}
+
+
+form{
+  display: flex;
+  flex-direction: column;
+  gap: var(--_wl-editor_gap);
+  padding: var(--_wl-editor_gap);
+}
+
+.error {
+  margin: auto;
+  color: red;
+  font-size: 2rem;
+  font-weight: 900;
+  text-align: center;
 }
