@@ -23,37 +23,38 @@ export class LbmAmbulanceWlEditor {
 
   private formElement: HTMLFormElement;
 
+  private async assumedEntryDateAsync(): Promise<Date> {
+    try {
+      const response = await AmbulanceWaitingListApiFactory(undefined, this.apiBase)
+        .getWaitingListEntries(this.ambulanceId)
+      if (response.status > 299) {
+        return new Date();
+      }
+      const lastPatientOut = response.data
+        .map((_: WaitingListEntry) =>
+            Date.parse(_.estimatedStart)
+            + _.estimatedDurationMinutes * 60 * 1000
+        )
+        .reduce((acc: number, value: number) => Math.max(acc, value), 0);
+      return new Date(Math.max(Date.now(), lastPatientOut));
+    } catch (err: any) {
+      return new Date();
+    }
+  }
+
   private async getWaitingEntryAsync(): Promise<WaitingListEntry> {
-    if(this.entryId === "@new") {
+    if (this.entryId === "@new") {
       this.isValid = false;
       this.entry = {
-        id: "@new",
-        patientId: "",
-        waitingSince: "",
-        estimatedDurationMinutes: 15
+       id: "@new",
+       patientId: "",
+       waitingSince: new Date().toISOString(),
+       estimatedDurationMinutes: 15
       };
+      this.entry.estimatedStart = (await this.assumedEntryDateAsync()).toISOString();
       return this.entry;
     }
-    if ( !this.entryId ) {
-       this.isValid = false;
-       return undefined
-    }
-    try {
-       const response
-           = await AmbulanceWaitingListApiFactory(undefined, this.apiBase)
-             .getWaitingListEntry(this.ambulanceId, this.entryId)
-
-       if (response.status < 299) {
-          this.entry = response.data;
-          this.isValid = true;
-       } else {
-          this.errorMessage = `Cannot retrieve list of waiting patients: ${response.statusText}`
-       }
-    } catch (err: any) {
-       this.errorMessage = `Cannot retrieve list of waiting patients: ${err.message || "unknown"}`
-    }
-    return undefined;
- }
+  }
 
  private async getConditions(): Promise<Condition[]> {
   try {
@@ -82,6 +83,8 @@ export class LbmAmbulanceWlEditor {
   }
 
  render() {
+  // console.debug("lbm-ambulance-wl-app.render() - path: %s", this.relativePath);
+
   if(this.errorMessage) {
       return (
       <Host>
@@ -110,9 +113,15 @@ export class LbmAmbulanceWlEditor {
               <md-icon slot="leading-icon">fingerprint</md-icon>
             </md-filled-text-field>
 
-            <md-filled-text-field label="Čakáte od" disabled value={this.entry?.waitingSince}>
-
-              <md-icon slot="leading-icon">watch_later</md-icon>
+            <md-filled-text-field disabled
+                       label="Čakáte od"
+                       value={new Date(this.entry?.waitingSince || Date.now()).toLocaleTimeString()}>
+                       <md-icon slot="leading-icon">watch_later</md-icon>
+            </md-filled-text-field>
+            <md-filled-text-field disabled
+                       label="Predpokladaný čas vyšetrenia"
+                       value={new Date(this.entry?.estimatedStart || Date.now()).toLocaleTimeString()}>
+                       <md-icon slot="leading-icon">login</md-icon>
             </md-filled-text-field>
 
             {this.renderConditions()}
